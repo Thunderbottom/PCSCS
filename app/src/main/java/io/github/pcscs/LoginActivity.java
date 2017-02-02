@@ -3,6 +3,7 @@ package io.github.pcscs;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.provider.Settings;
@@ -23,6 +24,15 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        // Show AppIntro if executed for the first time
+        /*if(isFirstTime()) {
+            Intent introActivity = new Intent(LoginActivity.this, IntroActivity.class);
+            startActivity(introActivity);
+            SharedPreferences prefs = getApplicationContext().getSharedPreferences("MyPrefs", MODE_PRIVATE);
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putBoolean("FirstTime", false);
+            editor.apply();
+        }*/
         // Check if network is available
         if(!isNetworkAvailable()) {
             // If network isn't available, prompt user to open Network Settings
@@ -61,7 +71,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        // Register
+        // Take user to Register Activity
         Button mReg = (Button)findViewById(R.id.mRegisterBtn);
         mReg.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,6 +82,7 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    // Check if network is available
     private boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager
                 = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
