@@ -2,8 +2,8 @@ package io.github.pcscs;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -14,6 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -40,10 +41,17 @@ public class UserProfileActivity extends AppCompatActivity
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FirebaseAuth.getInstance().signOut();
-                Intent intent = new Intent(UserProfileActivity.this, LoginActivity.class);
-                startActivity(intent);
-                finish();
+                try {
+                    FirebaseAuth.getInstance().signOut();
+                    Intent intent = new Intent(UserProfileActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                    finish();
+                    Toast.makeText(UserProfileActivity.this, R.string.logoutSuccess, Toast.LENGTH_SHORT).show();
+                }
+                catch (Exception e){
+                    Log.d("TAG", "onClick: ", e);
+                    Toast.makeText(UserProfileActivity.this, R.string.logoutFail, Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
@@ -82,7 +90,7 @@ public class UserProfileActivity extends AppCompatActivity
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 

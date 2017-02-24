@@ -1,5 +1,6 @@
 package io.github.pcscs;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -42,7 +43,7 @@ public class RegisterActivity extends AppCompatActivity {
     public String mPass;
     public String mcPass;
 
-    //public ProgressBar mProgressbar;
+    private ProgressDialog progress;
 
     private FirebaseAuth mFirebaseAuth;
 
@@ -124,11 +125,17 @@ public class RegisterActivity extends AppCompatActivity {
                         focusView.requestFocus();
                     } else {
                         // TODO: Encrypt password
+                        progress = new ProgressDialog(RegisterActivity.this);
+                        progress.setCancelable(true);
+                        progress.setMessage("Registering");
+                        progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                        progress.show();
                         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
                         mDatabase.child("users").child(mUsername).addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
                                 if (dataSnapshot.exists()) {
+                                    progress.dismiss();
                                     Toast.makeText(RegisterActivity.this, R.string.username_exists, Toast.LENGTH_SHORT).show();
                                     unField.setText("");
                                     setPass();
@@ -141,7 +148,8 @@ public class RegisterActivity extends AppCompatActivity {
 
                             @Override
                             public void onCancelled(DatabaseError databaseError) {
-                                Toast.makeText(RegisterActivity.this, "There was some error processing. Please try again in some time!", Toast.LENGTH_LONG).show();
+                                progress.dismiss();
+                                Toast.makeText(RegisterActivity.this, R.string.errorProcessing, Toast.LENGTH_LONG).show();
                                 Log.d("TAG", "onCancelled: Database error", databaseError.toException());
                             }
                         });
@@ -199,10 +207,13 @@ public class RegisterActivity extends AppCompatActivity {
                             DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
                             mDatabase.child("users").child(username).child("email").setValue(emailId);
                             mDatabase.child("users").child(username).child("name").setValue(name);
-                            Toast.makeText(getBaseContext(), "You are successfully registered ", Toast.LENGTH_SHORT).show();
-                            //mProgressbar.setVisibility(View.GONE);
+                            progress.dismiss();
+                            Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+                            startActivity(intent);
+                            RegisterActivity.this.finish();
+                            Toast.makeText(RegisterActivity.this, R.string.registerSuccess, Toast.LENGTH_SHORT).show();
                         } else {
-                            //mProgressbar.setVisibility(View.GONE);
+                            progress.dismiss();
                             AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
                             builder.setMessage(task.getException().getMessage())
                                     .setTitle(R.string.login_error_title)

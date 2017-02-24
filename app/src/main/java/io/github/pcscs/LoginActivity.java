@@ -4,7 +4,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.provider.Settings;
@@ -95,7 +94,6 @@ public class LoginActivity extends AppCompatActivity {
                     if (cancel) {
                         focusView.requestFocus();
                     } else {
-                        //progress = new ProgressDialog(LoginActivity.this);
                         progress = new ProgressDialog(v.getContext());
                         progress.setCancelable(true);
                         progress.setMessage("Logging in");
@@ -117,7 +115,7 @@ public class LoginActivity extends AppCompatActivity {
                                         @Override
                                         public void onCancelled(DatabaseError databaseError) {
                                             progress.dismiss();
-                                            Toast.makeText(LoginActivity.this, "There was some error processing. Please try again in some time!", Toast.LENGTH_LONG).show();
+                                            Toast.makeText(LoginActivity.this, R.string.errorProcessing, Toast.LENGTH_LONG).show();
                                             Log.d("TAG", "onCancelled: ", databaseError.toException());
                                         }
                                     });
@@ -168,8 +166,9 @@ public class LoginActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             progress.dismiss();
-                            Toast.makeText(LoginActivity.this, "Login success", Toast.LENGTH_SHORT).show();
-                        } else {
+                            checkIfEmailVerified();
+                            }
+                        else {
                             progress.dismiss();
                             AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
                             builder.setMessage(task.getException().getMessage())
@@ -177,6 +176,61 @@ public class LoginActivity extends AppCompatActivity {
                                     .setPositiveButton(android.R.string.ok, null);
                             AlertDialog dialog = builder.create();
                             dialog.show();
+                        }
+                    }
+                });
+    }
+
+    private void checkIfEmailVerified()
+    {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        assert user != null;
+        if (user.isEmailVerified())
+        {
+            Intent intent = new Intent (LoginActivity.this, UserProfileActivity.class);
+            startActivity(intent);
+            finish();
+            Toast.makeText(LoginActivity.this, "Successfully logged in", Toast.LENGTH_SHORT).show();
+        }
+        else
+        {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage(R.string.registeredVerification)
+                    .setTitle("Email Unverified!")
+                    .setCancelable(false)
+                    .setPositiveButton("Send Confirmation", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            sendVerification();
+                            FirebaseAuth.getInstance().signOut();
+                            overridePendingTransition(0, 0);
+                            finish();
+                            overridePendingTransition(0, 0);
+                            startActivity(getIntent());
+                        }
+                    });
+            AlertDialog alert = builder.create();
+            alert.show();
+        }
+    }
+
+    private void sendVerification()
+    {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        assert user != null;
+        user.sendEmailVerification()
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            // email sent
+                            Toast.makeText(LoginActivity.this, R.string.verificationSent, Toast.LENGTH_SHORT).show();
+                        }
+                        else
+                        {
+
+                            Toast.makeText(LoginActivity.this, R.string.verificationFailedToSend, Toast.LENGTH_SHORT).show();
+
                         }
                     }
                 });
