@@ -1,5 +1,6 @@
 package io.github.pcscs;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -49,6 +50,8 @@ public class IntroActivity extends AppIntro2 {
     public void onDonePressed(Fragment currentFragment) {
         super.onDonePressed(currentFragment);
         // Do something when users tap on Done button.
+        Intent i = new Intent(IntroActivity.this, LoginActivity.class);
+        startActivity(i);
         this.finish();
     }
 

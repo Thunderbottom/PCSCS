@@ -13,6 +13,7 @@ public class SplashActivity extends AppCompatActivity {
         if(isFirstTime()) {
             Intent introActivity = new Intent(SplashActivity.this, IntroActivity.class);
             startActivity(introActivity);
+            finish();
             SharedPreferences prefs = getApplicationContext().getSharedPreferences("MyPrefs", MODE_PRIVATE);
             SharedPreferences.Editor editor = prefs.edit();
             editor.putBoolean("FirstTime", false);
