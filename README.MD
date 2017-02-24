@@ -6,6 +6,7 @@ Software Engineering Course Android Application Project.
 ## Open Source Libraries Used - 
 
 * [AppIntro](https://github.com/apl-devs/AppIntro)
+* [Firebase](https://github.com/firebase/FirebaseUI-Android)
 
 ## License -
 
