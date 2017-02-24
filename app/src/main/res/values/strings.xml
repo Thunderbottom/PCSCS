@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">PCSCS</string>
+    <string name="app_package">io.github.pcscs</string>
     <string name="no_network">No Internet connection detected! \nOpen Network Settings?</string>
 
     <!-- Login/Register -->

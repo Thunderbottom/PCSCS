@@ -13,12 +13,4 @@
     tools:context="io.github.pcscs.UserProfileActivity"
     tools:showIn="@layout/app_bar_user_profile">
 
-    <Button
-        android:text="@string/logout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:id="@+id/logout" />
 </RelativeLayout>

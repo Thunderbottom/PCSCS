@@ -36,24 +36,6 @@ public class UserProfileActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
-        Button logout = (Button)findViewById(R.id.logout);
-        logout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    FirebaseAuth.getInstance().signOut();
-                    Intent intent = new Intent(UserProfileActivity.this, LoginActivity.class);
-                    startActivity(intent);
-                    finish();
-                    Toast.makeText(UserProfileActivity.this, R.string.logoutSuccess, Toast.LENGTH_SHORT).show();
-                }
-                catch (Exception e){
-                    Log.d("TAG", "onClick: ", e);
-                    Toast.makeText(UserProfileActivity.this, R.string.logoutFail, Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
     }
 
     @Override
@@ -81,7 +63,18 @@ public class UserProfileActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_logout) {
+            try {
+                FirebaseAuth.getInstance().signOut();
+                Intent intent = new Intent(UserProfileActivity.this, LoginActivity.class);
+                startActivity(intent);
+                finish();
+                Toast.makeText(UserProfileActivity.this, R.string.logoutSuccess, Toast.LENGTH_SHORT).show();
+            }
+            catch (Exception e){
+                Log.d("TAG", "onClick: ", e);
+                Toast.makeText(UserProfileActivity.this, R.string.logoutFail, Toast.LENGTH_SHORT).show();
+            }
             return true;
         }
 
