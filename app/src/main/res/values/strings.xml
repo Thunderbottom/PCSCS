@@ -1,4 +1,20 @@
 <resources>
     <string name="app_name">PCSCS</string>
     <string name="no_network">No Internet connection detected! \nOpen Network Settings?</string>
+
+   <!-- Login/Register -->
+    <string name="username_hint">Username</string>
+    <string name="password_hint">Password</string>
+    <string name="loginText">Login</string>
+    <string name="registerText">Register</string>
+
+    <string name="name_hint">Name</string>
+    <string name="email_hint">Email ID</string>
+    <string name="confirmPassword_hint">Confirm Password</string>
+    <string name="cancelText">Cancel</string>
+
+    <!-- Error -->
+    <string name="errorField">This field cannot be empty!</string>
+    <string name="passError">The passwords do not match!</string>
+    <string name="login_error_title">Error!</string>
 </resources>
