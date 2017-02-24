@@ -2,7 +2,7 @@
     <string name="app_name">PCSCS</string>
     <string name="no_network">No Internet connection detected! \nOpen Network Settings?</string>
 
-   <!-- Login/Register -->
+    <!-- Login/Register -->
     <string name="username_hint">Username</string>
     <string name="password_hint">Password</string>
     <string name="loginText">Login</string>
@@ -17,4 +17,14 @@
     <string name="errorField">This field cannot be empty!</string>
     <string name="passError">The passwords do not match!</string>
     <string name="login_error_title">Error!</string>
+    <string name="title_activity_user_profile">UserProfileActivity</string>
+    <string name="username_exists">The username already exists, Please use a different username</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+
+    <!-- Logout -->
+    <string name="logout">Logout</string>
 </resources>

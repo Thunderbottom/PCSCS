@@ -1,5 +1,6 @@
 package io.github.pcscs;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -12,6 +13,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -37,6 +39,8 @@ public class LoginActivity extends AppCompatActivity {
 
     // Firebase
     private FirebaseAuth mFirebaseAuth;
+
+    private ProgressDialog progress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,10 +95,15 @@ public class LoginActivity extends AppCompatActivity {
                     if (cancel) {
                         focusView.requestFocus();
                     } else {
+                        //progress = new ProgressDialog(LoginActivity.this);
+                        progress = new ProgressDialog(v.getContext());
+                        progress.setCancelable(true);
+                        progress.setMessage("Logging in");
+                        progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                        progress.show();
                         if(android.util.Patterns.EMAIL_ADDRESS.matcher(getUN).matches())
                             login(getUN, getPW);
                         else{
-                            //TODO: Login Logic
                             mDatabase.child("users").child(getUN).child("email")
                                     .addListenerForSingleValueEvent(new ValueEventListener() {
                                         @Override
@@ -107,7 +116,9 @@ public class LoginActivity extends AppCompatActivity {
 
                                         @Override
                                         public void onCancelled(DatabaseError databaseError) {
+                                            progress.dismiss();
                                             Toast.makeText(LoginActivity.this, "There was some error processing. Please try again in some time!", Toast.LENGTH_LONG).show();
+                                            Log.d("TAG", "onCancelled: ", databaseError.toException());
                                         }
                                     });
                         }
@@ -156,8 +167,10 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
+                            progress.dismiss();
                             Toast.makeText(LoginActivity.this, "Login success", Toast.LENGTH_SHORT).show();
                         } else {
+                            progress.dismiss();
                             AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
                             builder.setMessage(task.getException().getMessage())
                                     .setTitle(R.string.login_error_title)

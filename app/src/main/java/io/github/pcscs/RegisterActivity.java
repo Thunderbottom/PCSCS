@@ -22,8 +22,11 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -51,11 +54,11 @@ public class RegisterActivity extends AppCompatActivity {
         // Initialize Firebase
         mFirebaseAuth = FirebaseAuth.getInstance();
 
-        nField =(EditText)findViewById(R.id.nameField);
-        unField = (EditText)findViewById(R.id.userNameField);
-        eField = (EditText)findViewById(R.id.emailField);
-        passField = (EditText)findViewById(R.id.passwordField);
-        cpassField = (EditText)findViewById(R.id.confirmPasswordField);
+        nField = (EditText) findViewById(R.id.nameField);
+        unField = (EditText) findViewById(R.id.userNameField);
+        eField = (EditText) findViewById(R.id.emailField);
+        passField = (EditText) findViewById(R.id.passwordField);
+        cpassField = (EditText) findViewById(R.id.confirmPasswordField);
 
         // Go Back on Pressing Cancel
         Button mCancel = (Button) findViewById(R.id.CancelButton);
@@ -66,11 +69,11 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
 
-        Button mRegister = (Button)findViewById(R.id.RegisterButton);
+        Button mRegister = (Button) findViewById(R.id.RegisterButton);
         mRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(isNetworkAvailable()) {
+                if (isNetworkAvailable()) {
                     View focusView = null;
                     boolean cancel = false;
                     //mProgressbar.setVisibility(View.VISIBLE);
@@ -92,30 +95,25 @@ public class RegisterActivity extends AppCompatActivity {
                         nField.setError(getString(R.string.errorField));
                         focusView = nField;
                         setPass();
-                    }
-                    else if (TextUtils.isEmpty(mUsername)) {
+                    } else if (TextUtils.isEmpty(mUsername)) {
                         cancel = true;
                         unField.setError(getString(R.string.errorField));
                         focusView = unField;
                         setPass();
-                    }
-                    else if (TextUtils.isEmpty(mEmailid)) {
+                    } else if (TextUtils.isEmpty(mEmailid)) {
                         cancel = true;
                         eField.setError(getString(R.string.errorField));
                         focusView = eField;
                         setPass();
-                    }
-                    else if (TextUtils.isEmpty(mPass)) {
+                    } else if (TextUtils.isEmpty(mPass)) {
                         cancel = true;
                         passField.setError(getString(R.string.errorField));
                         focusView = passField;
-                    }
-                    else if (TextUtils.isEmpty(mcPass)) {
+                    } else if (TextUtils.isEmpty(mcPass)) {
                         cancel = true;
                         cpassField.setError(getString(R.string.errorField));
                         focusView = cpassField;
-                    }
-                    else if(!(mPass.equals(mcPass))) {
+                    } else if (!(mPass.equals(mcPass))) {
                         cancel = true;
                         cpassField.setError((getString(R.string.passError)));
                         setPass();
@@ -126,12 +124,31 @@ public class RegisterActivity extends AppCompatActivity {
                         focusView.requestFocus();
                     } else {
                         // TODO: Encrypt password
-                            regUser(mName, mUsername, mEmailid, mPass);
-                        Log.d("CheckTisOut", mName + " " + mUsername + " " + mEmailid + " " + mPass);
+                        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+                        mDatabase.child("users").child(mUsername).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                if (dataSnapshot.exists()) {
+                                    Toast.makeText(RegisterActivity.this, R.string.username_exists, Toast.LENGTH_SHORT).show();
+                                    unField.setText("");
+                                    setPass();
+                                    unField.requestFocus();
+                                } else {
+                                    // User does not exist. NOW call createUserWithEmailAndPassword
+                                    regUser(mName, mUsername, mEmailid, mPass);
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+                                Toast.makeText(RegisterActivity.this, "There was some error processing. Please try again in some time!", Toast.LENGTH_LONG).show();
+                                Log.d("TAG", "onCancelled: Database error", databaseError.toException());
+                            }
+                        });
+
                     }
 
-                }
-                else{
+                } else {
                     noNetwork();
                 }
             }
@@ -146,7 +163,7 @@ public class RegisterActivity extends AppCompatActivity {
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
-    private void noNetwork(){
+    private void noNetwork() {
         // If network isn't available, prompt user to open Network Settings
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(R.string.no_network)
@@ -168,33 +185,33 @@ public class RegisterActivity extends AppCompatActivity {
         alert.show();
     }
 
-    private void setPass(){
+    private void setPass() {
         passField.setText("");
         cpassField.setText("");
     }
 
-    private void regUser(final String name, final String username, final String emailId, final String password){
+    private void regUser(final String name, final String username, final String emailId, final String password) {
         mFirebaseAuth.createUserWithEmailAndPassword(emailId, password)
-            .addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<AuthResult>() {
-                @Override
-                public void onComplete(@NonNull Task<AuthResult> task) {
-                    if (task.isSuccessful()){
-                        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
-                        mDatabase.child("users").child(username).child("email").setValue(emailId);
-                        mDatabase.child("users").child(username).child("name").setValue(name);
-                        Toast.makeText(getBaseContext(),"You are successfully registered ",Toast.LENGTH_SHORT).show();
-                        //mProgressbar.setVisibility(View.GONE);
+                .addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+                            mDatabase.child("users").child(username).child("email").setValue(emailId);
+                            mDatabase.child("users").child(username).child("name").setValue(name);
+                            Toast.makeText(getBaseContext(), "You are successfully registered ", Toast.LENGTH_SHORT).show();
+                            //mProgressbar.setVisibility(View.GONE);
+                        } else {
+                            //mProgressbar.setVisibility(View.GONE);
+                            AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
+                            builder.setMessage(task.getException().getMessage())
+                                    .setTitle(R.string.login_error_title)
+                                    .setPositiveButton(android.R.string.ok, null);
+                            AlertDialog dialog = builder.create();
+                            dialog.show();
+                        }
                     }
-                    else{
-                        //mProgressbar.setVisibility(View.GONE);
-                        AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
-                        builder.setMessage(task.getException().getMessage())
-                                .setTitle(R.string.login_error_title)
-                                .setPositiveButton(android.R.string.ok, null);
-                        AlertDialog dialog = builder.create();
-                        dialog.show();
-                    }
-                }
-            });
+                });
     }
+
 }
