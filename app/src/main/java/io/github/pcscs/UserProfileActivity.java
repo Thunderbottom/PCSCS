@@ -1,22 +1,27 @@
 package io.github.pcscs;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.util.Log;
-import android.view.View;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+
+import io.github.pcscs.Fragments.HomeFragment;
+import io.github.pcscs.Fragments.ProfileFragment;
+import io.github.pcscs.Fragments.SearchFragment;
 
 public class UserProfileActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -36,6 +41,7 @@ public class UserProfileActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        displaySelectedScreen(R.id.nav_home);
     }
 
     @Override
@@ -51,7 +57,6 @@ public class UserProfileActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.user_profile, menu);
         return true;
     }
 
@@ -62,47 +67,80 @@ public class UserProfileActivity extends AppCompatActivity
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_logout) {
-            try {
-                FirebaseAuth.getInstance().signOut();
-                Intent intent = new Intent(UserProfileActivity.this, LoginActivity.class);
-                startActivity(intent);
-                finish();
-                Toast.makeText(UserProfileActivity.this, R.string.logoutSuccess, Toast.LENGTH_SHORT).show();
-            }
-            catch (Exception e){
-                Log.d("TAG", "onClick: ", e);
-                Toast.makeText(UserProfileActivity.this, R.string.logoutFail, Toast.LENGTH_SHORT).show();
-            }
-            return true;
-        }
-
         return super.onOptionsItemSelected(item);
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
+        displaySelectedScreen(item.getItemId());
+        return true;
+    }
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+    private void displaySelectedScreen(int itemId) {
 
-        } else if (id == R.id.nav_slideshow) {
+        //creating fragment object
+        Fragment fragment = null;
 
-        } else if (id == R.id.nav_manage) {
+        //initializing the fragment object which is selected
+        switch (itemId) {
+            case R.id.nav_home:
+                fragment = new HomeFragment();
+                break;
+            case R.id.nav_Search:
+                fragment = new SearchFragment();
+                break;
+            case R.id.nav_Profile:
+                fragment = new ProfileFragment();
+                break;
+            case R.id.nav_settings:
+                break;
+            case R.id.nav_logout:
+                logout();
+                break;
+        }
 
-        } else if (id == R.id.nav_share) {
+        //replacing the fragment
+        if (fragment != null) {
 
-        } else if (id == R.id.nav_send) {
-
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.replace(R.id.content_frame, fragment);
+            ft.commit();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
-        return true;
+    }
+
+    private void logout(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(R.string.registeredVerification)
+                .setTitle("Logging Out")
+                .setMessage("Are you sure you want to log out?")
+                .setCancelable(true)
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        try {
+                            dialog.dismiss();
+                            FirebaseAuth.getInstance().signOut();
+                            Intent intent = new Intent(UserProfileActivity.this, LoginActivity.class);
+                            startActivity(intent);
+                            finish();
+                            Toast.makeText(UserProfileActivity.this, R.string.logoutSuccess, Toast.LENGTH_SHORT).show();
+                        }
+                        catch (Exception e){
+                            dialog.dismiss();
+                            Toast.makeText(UserProfileActivity.this, R.string.logoutFail, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 }
