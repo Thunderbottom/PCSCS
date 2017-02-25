@@ -22,10 +22,10 @@ import com.google.firebase.auth.FirebaseAuth;
 import io.github.pcscs.Fragments.HomeFragment;
 import io.github.pcscs.Fragments.ProfileFragment;
 import io.github.pcscs.Fragments.SearchFragment;
+import io.github.pcscs.Fragments.SettingsFragment;
 
 public class UserProfileActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,7 +44,7 @@ public class UserProfileActivity extends AppCompatActivity
         displaySelectedScreen(R.id.nav_home);
     }
 
-    @Override
+        @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
@@ -94,6 +94,7 @@ public class UserProfileActivity extends AppCompatActivity
                 fragment = new ProfileFragment();
                 break;
             case R.id.nav_settings:
+                fragment = new SettingsFragment();
                 break;
             case R.id.nav_logout:
                 logout();
