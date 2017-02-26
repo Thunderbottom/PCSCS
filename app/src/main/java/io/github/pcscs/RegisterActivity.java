@@ -23,6 +23,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -207,6 +208,8 @@ public class RegisterActivity extends AppCompatActivity {
                             DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
                             mDatabase.child("users").child(username).child("email").setValue(emailId);
                             mDatabase.child("users").child(username).child("name").setValue(name);
+                            FirebaseUser regUser = task.getResult().getUser();
+                            regUser.sendEmailVerification();
                             progress.dismiss();
                             Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
                             startActivity(intent);

@@ -29,6 +29,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import static java.lang.System.exit;
+
 public class LoginActivity extends AppCompatActivity {
 
     public EditText userName;
@@ -199,6 +201,13 @@ public class LoginActivity extends AppCompatActivity {
             builder.setMessage(R.string.registeredVerification)
                     .setTitle("Email Unverified!")
                     .setCancelable(false)
+                    .setNegativeButton("Exit", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            LoginActivity.this.finish();
+                            exit(0);
+                        }
+                    })
                     .setPositiveButton("Send Confirmation", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             sendVerification();

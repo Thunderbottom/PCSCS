@@ -13,7 +13,7 @@
     <string name="email_hint">Email ID</string>
     <string name="confirmPassword_hint">Confirm Password</string>
     <string name="cancelText">Cancel</string>
-    <string name="registerSuccess">Successfully Registered, Please login to continue</string>
+    <string name="registerSuccess">Successfully Registered, Please check mail for email confirmation</string>
     <string name="registeredVerification">The Email ID associated with this account is unverified, Please verify to continue</string>
     <string name="verificationSent">Verification mail sent. Please check email to continue</string>
     <string name="verificationFailedToSend">Failed to send verification, Please try again later</string>
