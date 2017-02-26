@@ -1,4 +1,4 @@
-# PCSCS
+# PCSCS [![Build Status](https://travis-ci.org/Thunderbottom/PCSCS.svg?branch=master)](https://travis-ci.org/Thunderbottom/PCSCS)
 
 Software Engineering Course Android Application Project.
 
