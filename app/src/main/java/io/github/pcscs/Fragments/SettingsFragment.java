@@ -56,8 +56,4 @@ public class SettingsFragment extends Fragment {
             super.onViewCreated(view, savedInstanceState);
             getActivity().setTitle("Settings");
         }
-
-    public void OnBackPressed(){
-
-    }
-    }
+}
