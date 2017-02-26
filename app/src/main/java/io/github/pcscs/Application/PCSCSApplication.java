@@ -32,7 +32,7 @@ public class PCSCSApplication extends Application {
         remoteConfigDefaults.put(ForceUpdateChecker.KEY_UPDATE_CHANGES, "Bug Fixes and Improvements");
 
         firebaseRemoteConfig.setDefaults(remoteConfigDefaults);
-        firebaseRemoteConfig.fetch(900) // fetch every 15 minutes
+        firebaseRemoteConfig.fetch(60) // fetch every 15 minutes
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {

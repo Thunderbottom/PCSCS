@@ -2,6 +2,7 @@ package io.github.pcscs;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -23,13 +24,15 @@ import io.github.pcscs.Fragments.HomeFragment;
 import io.github.pcscs.Fragments.ProfileFragment;
 import io.github.pcscs.Fragments.SearchFragment;
 import io.github.pcscs.Fragments.SettingsFragment;
+import io.github.pcscs.Update.ForceUpdateChecker;
 
 public class UserProfileActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, ForceUpdateChecker.OnUpdateNeededListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
+        ForceUpdateChecker.with(this).onUpdateNeeded(this).check();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -75,6 +78,33 @@ public class UserProfileActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         displaySelectedScreen(item.getItemId());
         return true;
+    }
+
+    @Override
+    public void onUpdateNeeded(final String updateUrl, final String updateChanges) {
+        AlertDialog dialog = new AlertDialog.Builder(this)
+                .setTitle("New version available")
+                .setMessage("Changelog: \n" + updateChanges)
+                .setPositiveButton("Update",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                redirectDL(updateUrl);
+                            }
+                        }).setNegativeButton("No, thanks",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        }).create();
+        dialog.show();
+    }
+
+    private void redirectDL(String updateUrl) {
+        final Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(updateUrl));
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
     }
 
     private void displaySelectedScreen(int itemId) {
