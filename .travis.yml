@@ -1,6 +1,13 @@
 language: android
 jdk: oraclejdk8
-sudo: false
+
+before_cache:
+ -rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
+ -rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+cache:
+ directories:
+ -$HOME/.gradle/caches/
+ -$HOME/.gradle/wrapper/
 android:
   components:
   - platform-tools
@@ -18,7 +25,30 @@ before_script:
 - emulator -avd test -no-skin -no-audio -no-window &
 - android-wait-for-emulator
 - adb shell input keyevent 82 &
-script: ./gradlew clean assembleDebug
+script: "./gradlew clean assembleDebug"
 before_install:
-- openssl aes-256-cbc -K $encrypted_56c800ae8b27_key -iv $encrypted_56c800ae8b27_iv -in app/google-services.json.enc -out app/google-services.json -d
+- openssl aes-256-cbc -K $encrypted_25d35095545c_key -iv $encrypted_25d35095545c_iv
+  -in key.jks.enc -out key.jks -d
+- openssl aes-256-cbc -K $encrypted_56c800ae8b27_key -iv $encrypted_56c800ae8b27_iv
+  -in app/google-services.json.enc -out app/google-services.json -d
 - chmod +x gradlew
+- chmod +x addtags.sh
+after_success:
+- sh addtags.sh
+before_deploy:
+# Build the signed apk
+- ./gradlew assembleRelease -Pandroid.injected.signing.store.file=key.jks -Pandroid.injected.signing.store.password=$storepass -Pandroid.injected.signing.key.alias=pcscskeystore -Pandroid.injected.signing.key.password=$keypass
+# cd to the built apk directory
+- cd app/build/outputs/apk/
+- mv app-release.apk PCSCS-release.apk
+deploy:
+  provider: releases
+  api_key:
+    secure: qx+m6I/gaGN306+nWgfkmGR/ClxpkK88zJ6Zzwc35oRZ67gctIK/o+YnMlGRDQssWOxcPVKh2baXLMLHWgthyQwT5l7klbkjei1R5mxePu9l2ke0h+ST2/KKYUblk7aD/fZkOohPRPmqYUOV4Cu8bjbM4Dk9K9tQrxZKHuEBOGBVjAagi8vIeKnnwAgY+pOrPVWxCvyKiuTButgEm9TrrzSeTQ7Fgphzvmw64tWiKbKobNBz7nmpJtbetZabpzrntwZ6XtDPRqikSHv9h1Kll6CG0mHQ3BDesogPgd7WOLMOe5YGC3w1CjVQJHjIQ2nQzJuSOP5Rwzm4ekA/jF5vtyreRdfp6AivX6wGpu/b5mgKL5RiKL55PWTH6vGftRQ19yyu+9LS7h3QKB6ws5gcpWvA9UP1Qv43u+gkDjSuN0jNpK4ynSqKSwUpHy/gtA+zTAuqMHN/XGlKpmruGSn+5ACh6a4NHGm/CphNUgolSwE0a80aQVUIY6kh8KQPBk3ndHE51YJqJvQ9qdzxO/vVsXf5gQX1GkMGDNS40Mq9aqzdZjsuMbuH5jqxL+1Pcqp6ori+k1LDyKnol6K+iYzNYP06rnAcVWGC2/MFficfGHdDMqiBi/q/sALfG/KJ4qpdC7XqlZpwpmvnYnZDm62A+rq3aaGY1j6x57MINaqgRBs=
+  file: PCSCS-release.apk
+  on:
+    repo: Thunderbottom/PCSCS
+env:
+  global:
+  - secure: NVjNd/YTp+eBytef1tiJ3+G4bN1Qfrl4GPxJ7IrnUPEtdUTpmr2acmfkeVmpIXXYRgnjjXIXwjS4PG1f292yQHAob6RVuEyxLsIOpjYvQ8+EUATZqrqsa3FbFZ5vzwRGOmpTwUTKzsm2iECBoWyHaXIsoikffIcq0+GsiRO8enVaFb+t5T3uRuJuLROTPo/5R636pmjqcS8f7BOg0EYiR8DJgxuvbujyHMY9BEAzPFcmnjJHliSh7njcm2zZ0F+Ev33ShAkPIq8P9i4+kvb6o/djQt/w9N50uaJcgycddbq9RXz8Nj2MnypZH+HgW7byQ81hBJSZRBOwYzRQ35sXuzMkruSFojvvp0QQXJ0SCghHd5TtI3XVfGzZxsk/XDhuqJ9jlRuuxUhW+c4zCMYxgadTfYrqbFGrfZ4f1FO7ATC4orptujFUl+SEEsScH/YieT2gkRU6peeK36mOHfDdyvlgcGZeWWrByIs5CJl5BAUiE1LtXz46IrNSICr9+6m2GR9aS5NTMuOrkt4n3tyUA9QvD4bC09i7uumKP0kpj6QaMITUIA5/YQJMrSOIJnh4LXL1CYAdkVv57SzBiDSQ0WHP3Xh/j4UYQew9qT31IykPV9488B5Va/ZJOwc6HCEKRMegk77r2o1/vl280C9urVCM+vKK2I2PfZ8knmxdGNM=
+  - secure: lK46UQd0n4VDhZ3HDr3WoEaa8N1+d7eAFNWAkjjk6mtfwdtrf71yxTc+yPOWQFT8bQG7ZkIBBsljR4Eo01TOXivA0o1IOR9naLDSW9aS+r0jd2viR6YLyWYVO4iMpMp2rYW46JPa2ovwmkUfR0/+PLnHk1s1xFbQRtvK52u++gjivLONMZivya2/1PE8H2I2/BJRjyMtlHBal1TGETNDkXnKlPiBgnyuuZu5PqA/hy9ZeJKBf8CBwNb3r9BH2ufI5Sf/NmL4XO+dNp6sfyMd7O62oPARXTmIo2POruMyeT309eWZ0dL+Rp4U34t1LiIZig0e24zi+ZXRiqG1UiUOTD/Nc4dAFfCEuIvAIYivEAPvp4r5iv3nUyJKvrhEqADvBu70BxFhlBbXFFO+uh3bWVazUIzTHBvnJ9KaH91yckto5o6O/q3yhVemTbeip+PhkYNYBwKGKRGZYZKAEyPNIr8Ww2E0M5cfQMqiR/8O4hF2OLoX02wk+cVJWODy6AJisk61VhNdCWJrrAi4ARbnTARw/9LoF5E0pcFzRTA0COWK2nuGfwxw6Z4Xww4AHQenAh6KD5rCoTx9MExPxLP4lf9cLasJE+5CbiPJTSOIFNDDoA4yISXcClgK3/N0gp9ywzLvoke+J8+ovDrW2NFC5fDRJdvQolYUt1KusBHAchw=
