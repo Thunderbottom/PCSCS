@@ -19,6 +19,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import io.github.pcscs.Fragments.HomeFragment;
 import io.github.pcscs.Fragments.ProfileFragment;
@@ -32,6 +33,7 @@ public class UserProfileActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
+        checkIfEmailVerified();
         ForceUpdateChecker.with(this).onUpdateNeeded(this).check();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -173,5 +175,21 @@ public class UserProfileActivity extends AppCompatActivity
                 });
         AlertDialog alert = builder.create();
         alert.show();
+    }
+
+    // Check if user's email is verified
+    private void checkIfEmailVerified()
+    {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        assert user != null;
+        if (!user.isEmailVerified())
+        {
+            Toast.makeText(this, R.string.registeredVerification, Toast.LENGTH_LONG).show();
+            Intent intent = new Intent (UserProfileActivity.this, LoginActivity.class);
+            startActivity(intent);
+            UserProfileActivity.this.finish();
+            FirebaseAuth.getInstance().signOut();
+        }
     }
 }

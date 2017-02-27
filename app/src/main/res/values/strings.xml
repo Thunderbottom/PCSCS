@@ -35,7 +35,5 @@
     <string name="logoutSuccess">Successfully Logged out</string>
     <string name="logoutFail">Error logging out, Please try again later</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="copyright">Copyrights © %1$d</string>
 </resources>

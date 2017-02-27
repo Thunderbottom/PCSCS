@@ -6,17 +6,16 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -43,6 +42,8 @@ public class RegisterActivity extends AppCompatActivity {
     public String mEmailid;
     public String mPass;
     public String mcPass;
+    public String UID;
+    public boolean setFlag = false;
 
     private ProgressDialog progress;
 
@@ -134,32 +135,39 @@ public class RegisterActivity extends AppCompatActivity {
                         mUsername = mUsername.toLowerCase();
                         mEmailid = mEmailid.toLowerCase();
                         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
-                        mDatabase.child("users").child(mUsername).addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                if (dataSnapshot.exists()) {
-                                    progress.dismiss();
-                                    Toast.makeText(RegisterActivity.this, R.string.username_exists, Toast.LENGTH_SHORT).show();
-                                    unField.setText("");
-                                    setPass();
-                                    unField.requestFocus();
-                                } else {
-                                    // User does not exist. NOW call createUserWithEmailAndPassword
-                                    regUser(mName, mUsername, mEmailid, mPass);
-                                }
-                            }
+                        mDatabase.child("users")
+                                .addValueEventListener(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                        for (DataSnapshot userID : dataSnapshot.getChildren()){
+                                            if(userID.hasChild(mUsername)){
+                                                // Username exists
+                                                makeFlagSet();
+                                            }
+                                        }
+                                        if(!setFlag) {
+                                            regUser(mName, mUsername, mEmailid, mPass);
+                                        }
+                                        else{
+                                            progress.dismiss();
+                                            Toast.makeText(RegisterActivity.this, "The username already exists!", Toast.LENGTH_SHORT).show();
+                                            unField.setText("");
+                                            setPass();
+                                            unField.requestFocus();
+                                        }
+                                    }
 
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
-                                progress.dismiss();
-                                Toast.makeText(RegisterActivity.this, R.string.errorProcessing, Toast.LENGTH_LONG).show();
-                                Log.d("TAG", "onCancelled: Database error", databaseError.toException());
-                            }
-                        });
-
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+                                        progress.dismiss();
+                                        Toast.makeText(RegisterActivity.this, R.string.errorProcessing, Toast.LENGTH_LONG).show();
+                                        Log.d("TAG", "onCancelled: ", databaseError.toException());
+                                    }
+                                });
                     }
 
-                } else {
+                }
+                else {
                     noNetwork();
                 }
             }
@@ -208,10 +216,11 @@ public class RegisterActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
-                            mDatabase.child("users").child(username).child("email").setValue(emailId);
-                            mDatabase.child("users").child(username).child("name").setValue(name);
+                            mDatabase.child("users").child(task.getResult().getUser().getUid()).child(username).child("email").setValue(emailId);
+                            mDatabase.child("users").child(task.getResult().getUser().getUid()).child(username).child("name").setValue(name);
                             FirebaseUser regUser = task.getResult().getUser();
                             regUser.sendEmailVerification();
+                            //FirebaseAuth.getInstance().signOut();
                             progress.dismiss();
                             Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
                             startActivity(intent);
@@ -228,6 +237,10 @@ public class RegisterActivity extends AppCompatActivity {
                         }
                     }
                 });
+    }
+
+    private void makeFlagSet(){
+        setFlag = true;
     }
 
 }

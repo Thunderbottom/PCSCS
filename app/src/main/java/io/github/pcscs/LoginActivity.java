@@ -4,13 +4,14 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -35,8 +36,10 @@ public class LoginActivity extends AppCompatActivity {
 
     public EditText userName;
     public EditText password;
+    public String uid;
     public String getUN;
     public String getPW;
+    private boolean setFlag = false;
 
     // Firebase
     private FirebaseAuth mFirebaseAuth;
@@ -102,27 +105,50 @@ public class LoginActivity extends AppCompatActivity {
                         progress.setMessage("Logging in");
                         progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
                         progress.show();
-                        if(android.util.Patterns.EMAIL_ADDRESS.matcher(getUN).matches())
-                            login(getUN, getPW);
-                        else{
-                            mDatabase.child("users").child(getUN).child("email")
-                                    .addListenerForSingleValueEvent(new ValueEventListener() {
-                                        @Override
-                                        public void onDataChange(DataSnapshot dataSnapshot) {
-                                            if(dataSnapshot!=null){
-                                                String userId = dataSnapshot.getValue(String.class).toLowerCase();
-                                                login(userId, getPW);
+                        mDatabase.child("users")
+                                .addValueEventListener(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                        // recurse for every userid
+                                        for (DataSnapshot userids : dataSnapshot.getChildren()){
+                                            // check if userid has child which is the username that we want
+                                            if(userids.hasChild(getUN)){
+                                                // store the user ID
+                                                makeFlagSet();
+                                                uid = userids.getKey();
+                                                mDatabase.child("users").child(uid).child(getUN).child("email")
+                                                        .addListenerForSingleValueEvent(new ValueEventListener() {
+                                                            @Override
+                                                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                                                if(dataSnapshot!=null){
+                                                                    String userId = dataSnapshot.getValue(String.class).toLowerCase();
+                                                                    login(userId, getPW);
+                                                                }
+                                                            }
+
+                                                            @Override
+                                                            public void onCancelled(DatabaseError databaseError) {
+                                                                progress.dismiss();
+                                                                Toast.makeText(LoginActivity.this, R.string.errorProcessing, Toast.LENGTH_LONG).show();
+                                                                Log.d("TAG", "onCancelled: ", databaseError.toException());
+                                                            }
+                                                        });
                                             }
                                         }
-
-                                        @Override
-                                        public void onCancelled(DatabaseError databaseError) {
+                                        if(!setFlag){
                                             progress.dismiss();
-                                            Toast.makeText(LoginActivity.this, R.string.errorProcessing, Toast.LENGTH_LONG).show();
-                                            Log.d("TAG", "onCancelled: ", databaseError.toException());
+                                            Toast.makeText(LoginActivity.this, "The username does not exist", Toast.LENGTH_SHORT).show();
+                                            clearFields();
                                         }
-                                    });
-                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+                                        progress.dismiss();
+                                        Toast.makeText(LoginActivity.this, R.string.errorProcessing, Toast.LENGTH_LONG).show();
+                                        Log.d("TAG", "onCancelled: ", databaseError.toException());
+                                    }
+                                });
                     }
                 }
                 else{
@@ -162,6 +188,7 @@ public class LoginActivity extends AppCompatActivity {
         alert.show();
     }
 
+    // Try to login to the system
     private void login(String username, String pass){
         mFirebaseAuth.signInWithEmailAndPassword(username, pass)
                 .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
@@ -169,6 +196,8 @@ public class LoginActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             progress.dismiss();
+                            saveUser(getUN);
+                            Log.d("getUN", "onComplete: " + getUN);
                             checkIfEmailVerified();
                             }
                         else {
@@ -184,6 +213,7 @@ public class LoginActivity extends AppCompatActivity {
                 });
     }
 
+    // Check if user's email is verified
     private void checkIfEmailVerified()
     {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -206,6 +236,7 @@ public class LoginActivity extends AppCompatActivity {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             LoginActivity.this.finish();
+                            FirebaseAuth.getInstance().signOut();
                             exit(0);
                         }
                     })
@@ -224,6 +255,7 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    // Send email verification to the user if their email is not verified
     private void sendVerification()
     {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -244,5 +276,23 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     }
                 });
+    }
+
+
+    // Clear username and password fields in case of error
+    private void clearFields(){
+        userName.setText("");
+        password.setText("");
+        userName.requestFocus();
+    }
+
+    private void saveUser(String username){
+        SharedPreferences.Editor editor = getSharedPreferences("saveUser", MODE_PRIVATE).edit();
+        editor.putString("username", username);
+        editor.apply();
+    }
+
+    private void makeFlagSet(){
+        setFlag = true;
     }
 }

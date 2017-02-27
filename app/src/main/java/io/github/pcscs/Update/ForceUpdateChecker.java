@@ -57,7 +57,6 @@ public class ForceUpdateChecker {
             result = context.getPackageManager()
                     .getPackageInfo(context.getPackageName(), 0)
                     .versionName;
-            result = result.replaceAll("[a-zA-Z]|-", "");
         } catch (PackageManager.NameNotFoundException e) {
             Log.e(TAG, e.getMessage());
         }
