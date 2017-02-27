@@ -43,6 +43,8 @@ deploy:
   provider: releases
   api_key:
     secure: qx+m6I/gaGN306+nWgfkmGR/ClxpkK88zJ6Zzwc35oRZ67gctIK/o+YnMlGRDQssWOxcPVKh2baXLMLHWgthyQwT5l7klbkjei1R5mxePu9l2ke0h+ST2/KKYUblk7aD/fZkOohPRPmqYUOV4Cu8bjbM4Dk9K9tQrxZKHuEBOGBVjAagi8vIeKnnwAgY+pOrPVWxCvyKiuTButgEm9TrrzSeTQ7Fgphzvmw64tWiKbKobNBz7nmpJtbetZabpzrntwZ6XtDPRqikSHv9h1Kll6CG0mHQ3BDesogPgd7WOLMOe5YGC3w1CjVQJHjIQ2nQzJuSOP5Rwzm4ekA/jF5vtyreRdfp6AivX6wGpu/b5mgKL5RiKL55PWTH6vGftRQ19yyu+9LS7h3QKB6ws5gcpWvA9UP1Qv43u+gkDjSuN0jNpK4ynSqKSwUpHy/gtA+zTAuqMHN/XGlKpmruGSn+5ACh6a4NHGm/CphNUgolSwE0a80aQVUIY6kh8KQPBk3ndHE51YJqJvQ9qdzxO/vVsXf5gQX1GkMGDNS40Mq9aqzdZjsuMbuH5jqxL+1Pcqp6ori+k1LDyKnol6K+iYzNYP06rnAcVWGC2/MFficfGHdDMqiBi/q/sALfG/KJ4qpdC7XqlZpwpmvnYnZDm62A+rq3aaGY1j6x57MINaqgRBs=
+  file_glob: "true"
+  skip_cleanup: true
   file: PCSCS-release.apk
   on:
     repo: Thunderbottom/PCSCS
