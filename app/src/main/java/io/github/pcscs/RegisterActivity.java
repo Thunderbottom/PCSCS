@@ -131,6 +131,8 @@ public class RegisterActivity extends AppCompatActivity {
                         progress.setMessage("Registering");
                         progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
                         progress.show();
+                        mUsername = mUsername.toLowerCase();
+                        mEmailid = mEmailid.toLowerCase();
                         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
                         mDatabase.child("users").child(mUsername).addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override

@@ -96,6 +96,7 @@ public class LoginActivity extends AppCompatActivity {
                     if (cancel) {
                         focusView.requestFocus();
                     } else {
+                        getUN = getUN.toLowerCase().trim();
                         progress = new ProgressDialog(v.getContext());
                         progress.setCancelable(true);
                         progress.setMessage("Logging in");
@@ -109,7 +110,7 @@ public class LoginActivity extends AppCompatActivity {
                                         @Override
                                         public void onDataChange(DataSnapshot dataSnapshot) {
                                             if(dataSnapshot!=null){
-                                                String userId = dataSnapshot.getValue(String.class);
+                                                String userId = dataSnapshot.getValue(String.class).toLowerCase();
                                                 login(userId, getPW);
                                             }
                                         }
