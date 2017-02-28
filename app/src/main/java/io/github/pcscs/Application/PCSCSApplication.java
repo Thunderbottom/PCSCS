@@ -7,7 +7,6 @@ import android.util.Log;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.crash.FirebaseCrash;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 
 import java.util.HashMap;
@@ -43,13 +42,5 @@ public class PCSCSApplication extends Application {
                         }
                     }
                 });
-
-        // Firebase crash analytics
-        Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler(){
-            @Override
-            public void uncaughtException(Thread thread, Throwable ex) {
-                FirebaseCrash.report(ex);
-            }
-        });
     }
 }

@@ -10,6 +10,7 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -83,16 +84,18 @@ public class LoginActivity extends AppCompatActivity {
                     View focusView = null;
                     getUN = userName.getText().toString();
                     getPW = password.getText().toString();
-                    userName.setError(null);
-                    password.setError(null);
+                    TextInputLayout til_username = (TextInputLayout) findViewById(R.id.til_username);
+                    TextInputLayout til_password = (TextInputLayout) findViewById(R.id.til_password);
+                    til_username.setError(null);
+                    til_password.setError(null);
                     if (TextUtils.isEmpty(getUN)) {
                         cancel = true;
-                        userName.setError(getString(R.string.errorField));
+                        til_username.setError(getString(R.string.errorField));
                         focusView = userName;
                     }
-                    if (TextUtils.isEmpty(getPW)) {
+                    else if (TextUtils.isEmpty(getPW)) {
                         cancel = true;
-                        password.setError(getString(R.string.errorField));
+                        til_password.setError(getString(R.string.errorField));
                         focusView = password;
                     }
 

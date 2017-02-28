@@ -9,6 +9,7 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -87,38 +88,45 @@ public class RegisterActivity extends AppCompatActivity {
                     mPass = passField.getText().toString().trim();
                     mcPass = cpassField.getText().toString().trim();
 
-                    nField.setError(null);
-                    unField.setError(null);
-                    eField.setError(null);
-                    passField.setError(null);
-                    cpassField.setError(null);
+                    TextInputLayout til_regname = (TextInputLayout) findViewById(R.id.til_regname);
+                    TextInputLayout til_regusername = (TextInputLayout) findViewById(R.id.til_regusername);
+                    TextInputLayout til_regemail = (TextInputLayout) findViewById(R.id.til_regemail);
+                    TextInputLayout til_regpass = (TextInputLayout) findViewById(R.id.til_regpass);
+                    TextInputLayout til_regcpass = (TextInputLayout) findViewById(R.id.til_regcpass);
+
+
+                    til_regname.setError(null);
+                    til_regusername.setError(null);
+                    til_regemail.setError(null);
+                    til_regpass.setError(null);
+                    til_regcpass.setError(null);
 
                     if (TextUtils.isEmpty(mName)) {
                         cancel = true;
-                        nField.setError(getString(R.string.errorField));
+                        til_regname.setError(getString(R.string.errorField));
                         focusView = nField;
                         setPass();
                     } else if (TextUtils.isEmpty(mUsername)) {
                         cancel = true;
-                        unField.setError(getString(R.string.errorField));
+                        til_regusername.setError(getString(R.string.errorField));
                         focusView = unField;
                         setPass();
                     } else if (TextUtils.isEmpty(mEmailid)) {
                         cancel = true;
-                        eField.setError(getString(R.string.errorField));
+                        til_regemail.setError(getString(R.string.errorField));
                         focusView = eField;
                         setPass();
                     } else if (TextUtils.isEmpty(mPass)) {
                         cancel = true;
-                        passField.setError(getString(R.string.errorField));
+                        til_regpass.setError(getString(R.string.errorField));
                         focusView = passField;
                     } else if (TextUtils.isEmpty(mcPass)) {
                         cancel = true;
-                        cpassField.setError(getString(R.string.errorField));
+                        til_regcpass.setError(getString(R.string.errorField));
                         focusView = cpassField;
                     } else if (!(mPass.equals(mcPass))) {
                         cancel = true;
-                        cpassField.setError((getString(R.string.passError)));
+                        til_regcpass.setError((getString(R.string.passError)));
                         setPass();
                         focusView = passField;
                     }
