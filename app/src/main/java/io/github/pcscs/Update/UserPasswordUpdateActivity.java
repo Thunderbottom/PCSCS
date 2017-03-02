@@ -48,7 +48,6 @@ public class UserPasswordUpdateActivity extends AppCompatActivity {
         updatePassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(UserPasswordUpdateActivity.this, "Update password", Toast.LENGTH_SHORT).show();
                 til_changePass.setError(null);
                 til_changePassConfirm.setError(null);
 
@@ -63,8 +62,8 @@ public class UserPasswordUpdateActivity extends AppCompatActivity {
                     til_changePassConfirm.setError(getString(R.string.errorField));
                     changePassConfirm.requestFocus();
                 }
-                else if (getPass.equals(getcPass)){
-                    til_changePassConfirm.setError(getString(R.string.errorField));
+                else if (!getPass.equals(getcPass)){
+                    til_changePassConfirm.setError(getString(R.string.passError));
                     changePassConfirm.requestFocus();
                 }
                 else {
