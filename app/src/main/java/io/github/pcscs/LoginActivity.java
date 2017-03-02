@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
@@ -17,7 +18,9 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -75,6 +78,19 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        final CheckBox rememberCheck = (CheckBox)findViewById(R.id.rememberLogin);
+        rememberCheck.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (rememberCheck.isChecked()){
+                    rememberUser(1);
+                }
+                else{
+                    rememberUser(0);
+                }
+            }
+        });
+
         Button mLogin = (Button)findViewById(R.id.loginButton);
         mLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -108,48 +124,24 @@ public class LoginActivity extends AppCompatActivity {
                         progress.setMessage("Logging in");
                         progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
                         progress.show();
-                        mDatabase.child("users")
-                                .addValueEventListener(new ValueEventListener() {
+                        mDatabase.child("users").child(getUN).child("email")
+                                .addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(DataSnapshot dataSnapshot) {
-                                        // recurse for every userid
-                                        for (DataSnapshot userids : dataSnapshot.getChildren()){
-                                            // check if userid has child which is the username that we want
-                                            if(userids.hasChild(getUN)){
-                                                // store the user ID
-                                                makeFlagSet();
-                                                uid = userids.getKey();
-                                                mDatabase.child("users").child(uid).child(getUN).child("email")
-                                                        .addListenerForSingleValueEvent(new ValueEventListener() {
-                                                            @Override
-                                                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                                                if(dataSnapshot!=null){
-                                                                    String userId = dataSnapshot.getValue(String.class).toLowerCase();
-                                                                    login(userId, getPW);
-                                                                }
-                                                            }
-
-                                                            @Override
-                                                            public void onCancelled(DatabaseError databaseError) {
-                                                                progress.dismiss();
-                                                                Toast.makeText(LoginActivity.this, R.string.errorProcessing, Toast.LENGTH_LONG).show();
-                                                                Log.d("TAG", "onCancelled: ", databaseError.toException());
-                                                            }
-                                                        });
-                                            }
+                                        if(dataSnapshot!=null){
+                                            String userId = dataSnapshot.getValue(String.class);
+                                            login(userId, getPW);
                                         }
-                                        if(!setFlag){
+                                        else{
                                             progress.dismiss();
                                             Toast.makeText(LoginActivity.this, "The username does not exist", Toast.LENGTH_SHORT).show();
                                             clearFields();
                                         }
                                     }
-
                                     @Override
                                     public void onCancelled(DatabaseError databaseError) {
                                         progress.dismiss();
-                                        Toast.makeText(LoginActivity.this, R.string.errorProcessing, Toast.LENGTH_LONG).show();
-                                        Log.d("TAG", "onCancelled: ", databaseError.toException());
+                                        Toast.makeText(LoginActivity.this, "There was some error processing. Please try again in some time!", Toast.LENGTH_LONG).show();
                                     }
                                 });
                     }
@@ -157,6 +149,15 @@ public class LoginActivity extends AppCompatActivity {
                 else{
                     noNetwork();
                 }
+            }
+        });
+
+        TextView resetPass = (TextView) findViewById(R.id.resetPass);
+        resetPass.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent (LoginActivity.this, UserCheck.class);
+                startActivity(intent);
             }
         });
     }
@@ -224,6 +225,7 @@ public class LoginActivity extends AppCompatActivity {
         assert user != null;
         if (user.isEmailVerified())
         {
+            setError();
             Intent intent = new Intent (LoginActivity.this, UserProfileActivity.class);
             startActivity(intent);
             finish();
@@ -295,7 +297,17 @@ public class LoginActivity extends AppCompatActivity {
         editor.apply();
     }
 
-    private void makeFlagSet(){
-        setFlag = true;
+    private void rememberUser(int val){
+        SharedPreferences.Editor editor = getSharedPreferences("rememberUser", MODE_PRIVATE).edit();
+        editor.putInt("remember", val);
+        editor.apply();
+    }
+
+
+    private void setError() {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putInt("errorCheck", 0);
+        editor.apply();
     }
 }

@@ -20,6 +20,7 @@
     <!-- Error -->
     <string name="errorProcessing">There was some error processing. Please try again in some time!</string>
     <string name="errorField">This field cannot be empty!</string>
+    <string name="emailError">The email does not match!</string>
     <string name="passError">The passwords do not match!</string>
     <string name="login_error_title">Error!</string>
     <string name="title_activity_user_profile">UserProfileActivity</string>
@@ -28,12 +29,33 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
+    <!-- Menu -->
     <string name="action_settings">Settings</string>
+    <string name="editProfile">Edit Profile</string>
+
+    <!-- User Verify -->
+    <string name="userCheck">Please confirm the password to continue</string>
+    <string name="confirmText">Confirm</string>
+    <string name="securityLogout">Logged user out for security</string>
+
+    <!-- Update User Profile -->
+    <string name="changePassword">Change Password</string>
+    <string name="updateText">Update</string>
+    <string name="email_confirm_hint">Confirm Email ID</string>
+    <string name="passUpdateText">Update Password</string>
 
     <!-- Logout -->
     <string name="logout">Logout</string>
     <string name="logoutSuccess">Successfully Logged out</string>
     <string name="logoutFail">Error logging out, Please try again later</string>
 
-    <string name="copyright">Copyrights © %1$d</string>
+    <string name="copyright">Copyrights %1$d</string>
+    <string name="profileUpdated">Profile updated successfully!</string>
+    <string name="profileUpdateFailed">Failed to update profile, total errors:</string>
+    <string name="easter_egg">Your existence disgusts me!</string>
+    <string name="passwordResetEmail">Please enter your registered email</string>
+    <string name="PasswordResetSent">Mail sent, please check your email</string>
+    <string name="PasswordResetFailed">Failed to send mail, please try again later</string>
+    <string name="ResetPassword">Forgot Password</string>
+    <string name="rememberLogin">Remember Me</string>
 </resources>

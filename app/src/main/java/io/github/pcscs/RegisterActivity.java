@@ -24,6 +24,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -57,6 +58,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         // Initialize Firebase
         mFirebaseAuth = FirebaseAuth.getInstance();
+
 
         nField = (EditText) findViewById(R.id.nameField);
         unField = (EditText) findViewById(R.id.userNameField);
@@ -147,8 +149,8 @@ public class RegisterActivity extends AppCompatActivity {
                                 .addValueEventListener(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(DataSnapshot dataSnapshot) {
-                                        for (DataSnapshot userID : dataSnapshot.getChildren()){
-                                            if(userID.hasChild(mUsername)){
+                                        for (DataSnapshot username : dataSnapshot.getChildren()){
+                                            if(username.toString().equals(mUsername)){
                                                 // Username exists
                                                 makeFlagSet();
                                             }
@@ -224,11 +226,14 @@ public class RegisterActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
-                            mDatabase.child("users").child(task.getResult().getUser().getUid()).child(username).child("email").setValue(emailId);
-                            mDatabase.child("users").child(task.getResult().getUser().getUid()).child(username).child("name").setValue(name);
+                            mDatabase.child("users").child(username).child("email").setValue(emailId);
                             FirebaseUser regUser = task.getResult().getUser();
+                            UserProfileChangeRequest profileChangeRequest = new UserProfileChangeRequest.Builder()
+                                    .setDisplayName(name)
+                                    .build();
+                            regUser.updateProfile(profileChangeRequest);
                             regUser.sendEmailVerification();
-                            //FirebaseAuth.getInstance().signOut();
+                            FirebaseAuth.getInstance().signOut();
                             progress.dismiss();
                             Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
                             startActivity(intent);

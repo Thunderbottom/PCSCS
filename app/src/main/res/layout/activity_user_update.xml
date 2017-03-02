@@ -8,7 +8,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".LoginActivity"
+    tools:context=".Update.UserUpdateActivity"
     android:orientation="vertical">
 
     <com.github.florent37.materialtextfield.MaterialTextField
@@ -16,12 +16,12 @@
         android:layout_height="wrap_content"
         >
         <android.support.design.widget.TextInputLayout
-            android:id="@+id/til_regname"
+            android:id="@+id/til_changeName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:errorEnabled="true">
             <android.support.design.widget.TextInputEditText
-                android:id="@+id/nameField"
+                android:id="@+id/nameChangeField"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
@@ -38,33 +38,12 @@
         android:layout_height="wrap_content"
         >
         <android.support.design.widget.TextInputLayout
-            android:id="@+id/til_regusername"
+            android:id="@+id/til_changeEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:errorEnabled="true">
             <android.support.design.widget.TextInputEditText
-                android:id="@+id/userNameField"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:ems="10"
-                android:hint="@string/username_hint"
-                android:inputType="text" />
-        </android.support.design.widget.TextInputLayout>
-    </com.github.florent37.materialtextfield.MaterialTextField>
-
-    <com.github.florent37.materialtextfield.MaterialTextField
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        >
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/til_regemail"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:errorEnabled="true">
-            <android.support.design.widget.TextInputEditText
-                android:id="@+id/emailField"
+                android:id="@+id/emailChangeField"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
@@ -80,49 +59,28 @@
         android:layout_height="wrap_content"
         >
         <android.support.design.widget.TextInputLayout
-            android:id="@+id/til_regpass"
+            android:id="@+id/til_changeEmailconfirm"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:errorEnabled="true">
             <android.support.design.widget.TextInputEditText
-                android:id="@+id/passwordField"
+                android:id="@+id/emailChangeFieldconfirm"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
                 android:ems="10"
-                android:hint="@string/password_hint"
-                android:inputType="textPassword" />
-        </android.support.design.widget.TextInputLayout>
-    </com.github.florent37.materialtextfield.MaterialTextField>
-
-    <com.github.florent37.materialtextfield.MaterialTextField
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        >
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/til_regcpass"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:errorEnabled="true">
-            <android.support.design.widget.TextInputEditText
-                android:id="@+id/confirmPasswordField"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:ems="10"
-                android:hint="@string/confirmPassword_hint"
-                android:inputType="textPassword" />
+                android:hint="@string/email_confirm_hint"
+                android:inputType="text" />
         </android.support.design.widget.TextInputLayout>
     </com.github.florent37.materialtextfield.MaterialTextField>
 
     <Button
-        android:id="@+id/RegisterButton"
+        android:id="@+id/changeProfileButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        android:text="@string/registerText" />
+        android:layout_marginTop="25dp"
+        android:text="@string/updateText" />
 
     <Button
         android:id="@+id/CancelButton"
@@ -130,6 +88,17 @@
         android:layout_height="wrap_content"
 
         android:text="@string/cancelText" />
+
+    <TextView
+        android:text="@string/changePassword"
+        android:layout_marginTop="25dp"
+        android:gravity="center"
+        android:textSize="18sp"
+        android:textAllCaps="true"
+        android:textColor="@color/colorAccent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/editProfilePassword" />
 
 
 </LinearLayout>

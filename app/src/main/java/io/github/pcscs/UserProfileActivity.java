@@ -83,6 +83,11 @@ public class UserProfileActivity extends AppCompatActivity
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
     public void onUpdateNeeded(final String updateUrl, final String updateChanges) {
         AlertDialog dialog = new AlertDialog.Builder(this)
                 .setTitle("New version available")

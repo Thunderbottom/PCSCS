@@ -34,6 +34,10 @@
             android:label="@string/title_activity_user_profile"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".AboutActivity" />
+        <activity android:name=".UserCheck" />
+        <activity android:name=".Update.UserUpdateActivity" />
+        <activity android:name=".Update.UserPasswordUpdateActivity" />
+        <activity android:name=".Update.PasswordResetActivity"></activity>
     </application>
 
 </manifest>
