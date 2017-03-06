@@ -32,7 +32,7 @@
                 android:layout_alignParentTop="true"
                 android:ems="10"
                 android:hint="@string/name_hint"
-                android:inputType="text" />
+                android:inputType="textCapWords" />
         </android.support.design.widget.TextInputLayout>
     </com.github.florent37.materialtextfield.MaterialTextField>
 

@@ -128,7 +128,7 @@ public class LoginActivity extends AppCompatActivity {
                                 .addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(DataSnapshot dataSnapshot) {
-                                        if(dataSnapshot!=null){
+                                        if(!dataSnapshot.getValue().equals("null")){
                                             String userId = dataSnapshot.getValue(String.class);
                                             login(userId, getPW);
                                         }
