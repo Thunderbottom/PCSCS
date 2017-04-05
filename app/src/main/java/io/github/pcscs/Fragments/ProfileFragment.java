@@ -26,6 +26,7 @@ import java.util.regex.Pattern;
 
 import io.github.pcscs.R;
 import io.github.pcscs.Update.UserUpdateActivity;
+import io.github.pcscs.UserBuildList;
 import io.github.pcscs.UserCheck;
 
 /**
@@ -77,6 +78,14 @@ public class ProfileFragment extends Fragment {
             public void onClick(View v) {
                 Intent intent = new Intent (getActivity(), UserCheck.class);
                 startActivityForResult(intent, 111);
+            }
+        });
+        TextView viewBuilds = (TextView) getView().findViewById(R.id.viewBuilds);
+        viewBuilds.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent (getActivity(), UserBuildList.class);
+                startActivity(intent);
             }
         });
     }

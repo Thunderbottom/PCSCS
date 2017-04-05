@@ -58,4 +58,8 @@
     <string name="PasswordResetFailed">Failed to send mail, please try again later</string>
     <string name="ResetPassword">Forgot Password</string>
     <string name="rememberLogin">Remember Me</string>
+    <string name="button_go_home">Home</string>
+    <string name="no_builds">You currently have no builds.</string>
+    <string name="createBuild">Create</string>
+    <string name="viewBuilds">View Builds</string>
 </resources>

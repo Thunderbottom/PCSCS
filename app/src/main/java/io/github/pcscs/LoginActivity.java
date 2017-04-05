@@ -128,14 +128,14 @@ public class LoginActivity extends AppCompatActivity {
                                 .addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(DataSnapshot dataSnapshot) {
-                                        if(!dataSnapshot.getValue().equals("null")){
-                                            String userId = dataSnapshot.getValue(String.class);
-                                            login(userId, getPW);
-                                        }
-                                        else{
+                                        if(dataSnapshot.getValue().equals("null")){
                                             progress.dismiss();
                                             Toast.makeText(LoginActivity.this, "The username does not exist", Toast.LENGTH_SHORT).show();
                                             clearFields();
+                                        }
+                                        else{
+                                            String userId = dataSnapshot.getValue(String.class);
+                                            login(userId, getPW);
                                         }
                                     }
                                     @Override
