@@ -38,7 +38,8 @@
         <activity android:name=".Update.UserUpdateActivity" />
         <activity android:name=".Update.UserPasswordUpdateActivity" />
         <activity android:name=".Update.PasswordResetActivity" />
-        <activity android:name=".UserBuildList"></activity>
+        <activity android:name=".UserBuildList" />
+        <activity android:name=".ViewBuild"></activity>
     </application>
 
 </manifest>

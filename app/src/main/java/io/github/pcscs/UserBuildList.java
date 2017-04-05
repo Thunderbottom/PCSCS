@@ -1,5 +1,6 @@
 package io.github.pcscs;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -16,11 +17,13 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
 public class UserBuildList extends AppCompatActivity {
 
+    int key = 0;
     TextView noBuild;
     Button homeButton, createBuild;
     String username;
@@ -33,6 +36,7 @@ public class UserBuildList extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_build_list);
+        setTitle("Build List");
 
         mListView = (ListView)findViewById(R.id.buildList);
 
@@ -46,7 +50,7 @@ public class UserBuildList extends AppCompatActivity {
         SharedPreferences preferences = getSharedPreferences("saveUser", MODE_PRIVATE);
         username = preferences.getString("username", "null");
 
-        databaseReference = FirebaseDatabase.getInstance().getReference().child("builds");
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("builds").child(username);
 
         databaseReference.addChildEventListener(new ChildEventListener() {
             @Override
@@ -56,6 +60,7 @@ public class UserBuildList extends AppCompatActivity {
                     homeButton.setVisibility(View.GONE);
                     createBuild.setVisibility(View.GONE);
                 }
+                assert dataSnapshot != null;
                 String value = dataSnapshot.getValue(String.class);
                 mBuildList.add(value);
                 arrayAdapter.notifyDataSetChanged();
@@ -84,9 +89,29 @@ public class UserBuildList extends AppCompatActivity {
 
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String value = (String) parent.getItemAtPosition(position);
-                Toast.makeText(UserBuildList.this, value, Toast.LENGTH_SHORT).show();
+            public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
+                final String value = (String) parent.getItemAtPosition(position);
+                databaseReference
+                        .addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                for (DataSnapshot uniqueData : dataSnapshot.getChildren()){
+                                    if (uniqueData.getValue().equals(value)){
+                                        Intent i = new Intent(view.getContext(), ViewBuild.class);
+                                        Bundle bundle = new Bundle();
+                                        bundle.putString("buildNo", uniqueData.getKey());
+                                        bundle.putString("buildName", uniqueData.getValue().toString());
+                                        i.putExtras(bundle);
+                                        startActivity(i);
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+                                Toast.makeText(UserBuildList.this, "Error retrieving data for the build!", Toast.LENGTH_SHORT).show();
+                            }
+                        });
             }
         });
     }

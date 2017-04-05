@@ -62,4 +62,5 @@
     <string name="no_builds">You currently have no builds.</string>
     <string name="createBuild">Create</string>
     <string name="viewBuilds">View Builds</string>
+    <string name="buildNumber">Build ID #</string>
 </resources>
