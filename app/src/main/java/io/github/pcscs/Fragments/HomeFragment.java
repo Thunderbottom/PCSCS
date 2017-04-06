@@ -1,7 +1,9 @@
 package io.github.pcscs.Fragments;
 
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -9,21 +11,34 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import io.github.pcscs.R;
 import io.github.pcscs.SearchActivity;
+import io.github.pcscs.UserBuildList;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class HomeFragment extends Fragment {
 
+    String username;
+    DatabaseReference databaseReference;
+    RelativeLayout homeLayout;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
-        return inflater.inflate(R.layout.fragment_home, container, false);
+        homeLayout = (RelativeLayout) inflater.inflate(R.layout.fragment_home, container, false);
+        return homeLayout;
     }
 
 
@@ -32,7 +47,33 @@ public class HomeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         getActivity().setTitle("Home");
 
-        FloatingActionButton floatingActionButton = (FloatingActionButton) getView().findViewById(R.id.fab);
+        final TextView buildCount = (TextView) homeLayout.findViewById(R.id.textView);
+
+        SharedPreferences savedUser = this.getActivity().getSharedPreferences("saveUser", Context.MODE_PRIVATE);
+        String username = savedUser.getString("username","null");
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("builds").child(username);
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                buildCount.append(" " + Long.toString(dataSnapshot.getChildrenCount()) + " builds");
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        Button viewBuilds = (Button) homeLayout.findViewById(R.id.viewBuilds);
+        viewBuilds.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent (getActivity(), UserBuildList.class);
+                startActivity(i);
+            }
+        });
+
+        FloatingActionButton floatingActionButton = (FloatingActionButton) homeLayout.findViewById(R.id.fab);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

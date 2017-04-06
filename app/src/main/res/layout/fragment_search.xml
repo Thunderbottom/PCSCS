@@ -7,9 +7,28 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Search Fragment"
+        android:text="@string/searchFragment"
         android:id="@+id/textView"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="109dp" />
+
+    <Button
+        android:id="@+id/searchBuilds"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="45dp"
+        android:text="@string/searchBuilds" />
+
+    <Button
+        android:id="@+id/searchParts"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/searchBuilds"
+        android:layout_below="@+id/searchBuilds"
+        android:layout_marginTop="28dp"
+        android:text="@string/searchParts" />
 
 </RelativeLayout>

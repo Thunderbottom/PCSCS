@@ -76,4 +76,66 @@
     <string name="manageBuild">Manage</string>
     <string name="submit">Submit</string>
     <string name="feedback">Type your query</string>
+    <string name="emptyFields">One or more fields are empty. Please fill all the fields</string>
+    <string name="buildTDP">TDP:</string>
+    <string name="buildCount">You have created </string>
+    <string name="searchFragment">You may search for builds and parts</string>
+    <string name="searchBuilds">Search Builds</string>
+    <string name="searchParts">Search Parts</string>
+    <string name="searchmeme">One does not simply search for builds.</string>
+
+    <string-array name="cpulist">
+        <item>AMD Ryzen 5</item>
+        <item>AMD Ryzen 7</item>
+        <item>AMD FX-8350</item>
+        <item>Intel i5 3250</item>
+        <item>Intel i7 6700</item>
+        <item>Intel i7 6900k</item>
+        <item>Intel Xeon</item>
+    </string-array>
+
+    <string-array name="cablist">
+        <item>Corsair Carbide Spec-01</item>
+        <item>Cooler Master Pro</item>
+        <item>Corsair Series 1 Red</item>
+        <item>Phanteks Enthoo</item>
+        <item>Thermaltake Core P3</item>
+        <item>Fractal Design R1</item>
+        <item>NZXT S340</item>
+    </string-array>
+    <string-array name="gpulist">
+        <item>Nvidia GTX 1060</item>
+        <item>Nvidia GTX 1080</item>
+        <item>AMD RX480</item>
+        <item>AMD Vega</item>
+        <item>Nvidia GTX 1080ti</item>
+        <item>Nvidia GTX 1050ti</item>
+        <item>Nvidia GT210 Tobya Edition</item>
+    </string-array>
+    <string-array name="mobolist">
+        <item>MSI Z170A</item>
+        <item>Gigabyte Z170A</item>
+        <item>ASRock Z270</item>
+        <item>MSI H110M</item>
+        <item>MSI B150M</item>
+        <item>ASUS Z170A</item>
+        <item>ASRock Fatal1ty</item>
+    </string-array>
+    <string-array name="monlist">
+        <item>BenQ 21in. 1080p</item>
+        <item>BenQ 22in. 1080p</item>
+        <item>LG 27in. 1440p</item>
+        <item>AOC 21in. 768p</item>
+        <item>ASUS ROG Strix 27in. 1440p</item>
+        <item>LG 35in. 2880p</item>
+    </string-array>
+    <string-array name="psulist">
+        <item>Corsair 500W</item>
+        <item>Corsair 600W</item>
+        <item>Cooler Master 800W</item>
+        <item>NZXT 1000W</item>
+        <item>Corsair 300W</item>
+        <item>NZXT 600W</item>
+        <item>Silverstone 800W</item>
+    </string-array>
 </resources>

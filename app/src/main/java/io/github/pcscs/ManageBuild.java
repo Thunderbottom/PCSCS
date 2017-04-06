@@ -17,6 +17,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.Random;
+
 public class ManageBuild extends AppCompatActivity {
 
     String buildNumber, username;
@@ -189,6 +191,17 @@ public class ManageBuild extends AppCompatActivity {
                                     }
                                 }
                             });
+                    databaseReference = FirebaseDatabase.getInstance().getReference().child("TDP");
+                    databaseReference.child(buildNumber)
+                            .setValue(getTDP() + "W")
+                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (!task.isSuccessful()){
+                                        setError();
+                                    }
+                                }
+                            });
                     progress.dismiss();
                     if(error >= 1){
                         Toast.makeText(ManageBuild.this, getString(R.string.buildUpdateFailed) + error, Toast.LENGTH_SHORT).show();
@@ -204,5 +217,10 @@ public class ManageBuild extends AppCompatActivity {
 
     public void setError(){
         error += 1;
+    }
+
+    public String getTDP(){
+        Random rand = new Random();
+        return Integer.toString(rand.nextInt(600 - 400 + 1) + 400);
     }
 }

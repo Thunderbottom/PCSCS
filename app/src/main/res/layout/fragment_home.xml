@@ -7,10 +7,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Home Fragment"
+        android:text="@string/buildCount"
         android:id="@+id/textView"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="111dp" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
@@ -23,6 +24,16 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:layout_marginEnd="16dp"
-        android:src="@drawable/search_fab"/>
+        android:src="@drawable/search_fab"
+        android:tint="@color/white"/>
+
+    <Button
+        android:id="@+id/viewBuilds"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="37dp"
+        android:text="@string/viewBuilds" />
 
 </RelativeLayout>

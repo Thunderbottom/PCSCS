@@ -14,6 +14,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -23,7 +24,7 @@ public class ViewBuild extends AppCompatActivity {
 
     // For the parts list
     String CPU, MOBO, GPU, PSU, MON, CAB;
-    TextView buildNum, buildNm;
+    TextView buildNum, buildNm, TDPVal;
     ListView mListView;
     DatabaseReference databaseReference;
 
@@ -46,9 +47,25 @@ public class ViewBuild extends AppCompatActivity {
 
         mListView = (ListView)findViewById(R.id.buildList);
 
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("TDP").child(buildNumber);
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot != null) {
+                    setTDP(dataSnapshot.getValue().toString());
+                }
+                else
+                    setTDP("500W");
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
         final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, mBuildList);
         mListView.setAdapter(arrayAdapter);
-
         databaseReference = FirebaseDatabase.getInstance().getReference().child("buildlist").child(buildNumber);
 
         databaseReference.addChildEventListener(new ChildEventListener() {
@@ -105,5 +122,11 @@ public class ViewBuild extends AppCompatActivity {
                 startActivity(i);
             }
         });
+    }
+
+    public void setTDP(String TDP){
+        TextView TDPVal = (TextView) findViewById(R.id.tdpVal);
+        TDPVal.append(TDP);
+
     }
 }
