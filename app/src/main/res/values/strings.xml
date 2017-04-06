@@ -51,7 +51,9 @@
 
     <string name="copyright">Copyrights %1$d</string>
     <string name="profileUpdated">Profile updated successfully!</string>
-    <string name="profileUpdateFailed">Failed to update profile, total errors:</string>
+    <string name="profileUpdateFailed">Failed to update build, total errors:</string>
+    <string name="buildUpdated">Build updated successfully!</string>
+    <string name="buildUpdateFailed">Failed to update profile, total errors:</string>
     <string name="easter_egg">Your existence disgusts me!</string>
     <string name="passwordResetEmail">Please enter your registered email</string>
     <string name="PasswordResetSent">Mail sent, please check your email</string>
@@ -63,4 +65,15 @@
     <string name="createBuild">Create</string>
     <string name="viewBuilds">View Builds</string>
     <string name="buildNumber">Build ID #</string>
+    <string name="search">Search</string>
+    <string name="cpu">CPU</string>
+    <string name="motherboard">MOBO</string>
+    <string name="psu">PSU</string>
+    <string name="gpu">GPU</string>
+    <string name="screen">MON</string>
+    <string name="cabinet">CAB</string>
+    <string name="buildName">Build Name</string>
+    <string name="manageBuild">Manage</string>
+    <string name="submit">Submit</string>
+    <string name="feedback">Type your query</string>
 </resources>

@@ -10,7 +10,7 @@
         android:id="@+id/buildNumber"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="26dp"
+        android:layout_marginTop="25dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:text="@string/buildNumber"/>
@@ -21,12 +21,21 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/buildNumber"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="12dp" />
+        android:layout_marginTop="10dp" />
 
     <ListView
         android:id="@+id/buildList"
         android:layout_marginTop="10dp"
-        android:layout_below="@+id/buildName"
+        android:layout_below="@+id/manageButton"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
+    <Button
+        android:id="@+id/manageButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="@string/manageBuild"
+        android:paddingTop="5dp"
+        android:layout_below="@+id/buildName"/>
 </RelativeLayout>

@@ -1,8 +1,11 @@
 package io.github.pcscs;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -17,6 +20,9 @@ import java.util.ArrayList;
 public class ViewBuild extends AppCompatActivity {
 
     String buildName, buildNumber;
+
+    // For the parts list
+    String CPU, MOBO, GPU, PSU, MON, CAB;
     TextView buildNum, buildNm;
     ListView mListView;
     DatabaseReference databaseReference;
@@ -75,5 +81,29 @@ public class ViewBuild extends AppCompatActivity {
             }
         });
 
+        Button manageBuild = (Button) findViewById(R.id.manageButton);
+        manageBuild.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CPU = mListView.getAdapter().getItem(0).toString();
+                CAB = mListView.getAdapter().getItem(1).toString();
+                GPU = mListView.getAdapter().getItem(2).toString();
+                MON = mListView.getAdapter().getItem(3).toString();
+                MOBO = mListView.getAdapter().getItem(4).toString();
+                PSU = mListView.getAdapter().getItem(5).toString();
+                Intent i = new Intent(v.getContext(), ManageBuild.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("CPU", CPU);
+                bundle.putString("CAB", CAB);
+                bundle.putString("GPU", GPU);
+                bundle.putString("MON", MON);
+                bundle.putString("MOBO", MOBO);
+                bundle.putString("PSU", PSU);
+                bundle.putString("buildName", buildName);
+                bundle.putString("buildNumber", buildNumber);
+                i.putExtras(bundle);
+                startActivity(i);
+            }
+        });
     }
 }

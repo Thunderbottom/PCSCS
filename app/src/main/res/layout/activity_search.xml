@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="io.github.pcscs.SearchActivity">
+
+
+    <TextView
+        android:id="@+id/cpuSearch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/cpu"
+        android:layout_alignBaseline="@+id/CPUSearchList"
+        android:layout_alignBottom="@+id/CPUSearchList"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="12dp"
+        android:textAllCaps="true"
+        android:textStyle="bold"
+        android:textSize="16sp"/>
+
+    <AutoCompleteTextView
+        android:id="@+id/CPUSearchList"
+        android:hint="@string/search"
+        android:layout_width="match_parent"
+        android:layout_toEndOf="@id/cpuSearch"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="25dp"
+        android:layout_alignParentTop="true" />
+
+    <TextView
+        android:id="@+id/moboSearch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/motherboard"
+        android:layout_below="@id/cpuSearch"
+        android:paddingTop="20dp"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="12dp"
+        android:textAllCaps="true"
+        android:textStyle="bold"
+        android:textSize="16sp"/>
+
+    <AutoCompleteTextView
+        android:id="@+id/MOBOSearchList"
+        android:hint="@string/search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/moboSearch"
+        android:layout_alignBottom="@+id/moboSearch"
+        android:layout_toEndOf="@+id/moboSearch"
+        android:layout_marginStart="12sp"
+        android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:id="@+id/gpuSearch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/gpu"
+        android:layout_below="@id/moboSearch"
+        android:paddingTop="20dp"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="12dp"
+        android:textAllCaps="true"
+        android:textStyle="bold"
+        android:textSize="16sp"/>
+
+    <AutoCompleteTextView
+        android:id="@+id/GPUSearchList"
+        android:hint="@string/search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/gpuSearch"
+        android:layout_alignBottom="@+id/gpuSearch"
+        android:layout_alignParentEnd="true"
+        android:layout_alignStart="@+id/MOBOSearchList" />
+
+    <TextView
+        android:id="@+id/psuSearch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/psu"
+        android:layout_below="@id/gpuSearch"
+        android:paddingTop="20dp"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="12dp"
+        android:textAllCaps="true"
+        android:textStyle="bold"
+        android:textSize="16sp"/>
+
+    <AutoCompleteTextView
+        android:id="@+id/PSUSearchList"
+        android:hint="@string/search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/psuSearch"
+        android:layout_alignBottom="@+id/psuSearch"
+        android:layout_alignParentEnd="true"
+        android:layout_alignStart="@+id/CPUSearchList" />
+
+    <TextView
+        android:id="@+id/monitorSearch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/screen"
+        android:layout_below="@id/psuSearch"
+        android:paddingTop="20dp"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="12dp"
+        android:textAllCaps="true"
+        android:textStyle="bold"
+        android:textSize="16sp"/>
+
+    <AutoCompleteTextView
+        android:id="@+id/monitorSearchList"
+        android:hint="@string/search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/monitorSearch"
+        android:layout_alignBottom="@+id/monitorSearch"
+        android:layout_alignStart="@+id/GPUSearchList" />
+
+    <TextView
+        android:id="@+id/cabSearch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/cabinet"
+        android:layout_below="@id/monitorSearch"
+        android:paddingTop="20dp"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="12dp"
+        android:textAllCaps="true"
+        android:textStyle="bold"
+        android:textSize="16sp"/>
+
+    <AutoCompleteTextView
+        android:id="@+id/CABSearchList"
+        android:hint="@string/search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/cabSearch"
+        android:layout_alignBottom="@+id/cabSearch"
+        android:layout_alignParentEnd="true"
+        android:layout_alignStart="@+id/monitorSearchList" />
+
+    <EditText
+        android:id="@+id/buildName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/CABSearchList"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="49dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:hint="@string/buildName" />
+
+    <Button
+        android:id="@+id/createBuildButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/buildName"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="31dp"
+        android:text="@string/createBuild" />
+</RelativeLayout>

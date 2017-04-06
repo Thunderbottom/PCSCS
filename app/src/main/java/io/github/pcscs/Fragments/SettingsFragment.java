@@ -13,10 +13,11 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import io.github.pcscs.AboutActivity;
+import io.github.pcscs.FeedbackActivity;
 import io.github.pcscs.R;
 
 public class SettingsFragment extends Fragment {
-        final String[] settingList = new String[]{"About"};
+        final String[] settingList = new String[]{"About", "Feedback"};
 
         public SettingsFragment() {
             // Required empty public constructor
@@ -42,6 +43,10 @@ public class SettingsFragment extends Fragment {
                         case 0:
                             Intent intent = new Intent(getActivity(), AboutActivity.class);
                             startActivity(intent);
+                            break;
+                        case 1:
+                            Intent i =  new Intent(getActivity(), FeedbackActivity.class);
+                            startActivity(i);
                             break;
                     }
                 }

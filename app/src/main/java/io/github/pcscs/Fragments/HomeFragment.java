@@ -1,6 +1,7 @@
 package io.github.pcscs.Fragments;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -8,9 +9,9 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import io.github.pcscs.R;
+import io.github.pcscs.SearchActivity;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -35,7 +36,8 @@ public class HomeFragment extends Fragment {
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getContext(), "Search Clicked", Toast.LENGTH_SHORT).show();
+                Intent i = new Intent(getActivity(), SearchActivity.class);
+                startActivity(i);
             }
         });
     }
