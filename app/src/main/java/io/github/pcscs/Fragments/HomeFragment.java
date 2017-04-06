@@ -49,13 +49,35 @@ public class HomeFragment extends Fragment {
 
         final TextView buildCount = (TextView) homeLayout.findViewById(R.id.textView);
 
+        final Button viewBuilds = (Button) homeLayout.findViewById(R.id.viewBuilds);
+        viewBuilds.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent (getActivity(), UserBuildList.class);
+                startActivity(i);
+            }
+        });
+
+        final Button createBuilds = (Button) homeLayout.findViewById(R.id.createBuildButton);
+        createBuilds.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent (getActivity(), SearchActivity.class);
+                startActivity(i);
+            }
+        });
+
         SharedPreferences savedUser = this.getActivity().getSharedPreferences("saveUser", Context.MODE_PRIVATE);
-        String username = savedUser.getString("username","null");
+        username = savedUser.getString("username","null");
         databaseReference = FirebaseDatabase.getInstance().getReference().child("builds").child(username);
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 buildCount.append(" " + Long.toString(dataSnapshot.getChildrenCount()) + " builds");
+                if (dataSnapshot.getChildrenCount() == 0) {
+                    viewBuilds.setVisibility(View.GONE);
+                    createBuilds.setVisibility(View.VISIBLE);
+                }
             }
 
             @Override
@@ -64,14 +86,6 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        Button viewBuilds = (Button) homeLayout.findViewById(R.id.viewBuilds);
-        viewBuilds.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent (getActivity(), UserBuildList.class);
-                startActivity(i);
-            }
-        });
 
         FloatingActionButton floatingActionButton = (FloatingActionButton) homeLayout.findViewById(R.id.fab);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {

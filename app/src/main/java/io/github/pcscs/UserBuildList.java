@@ -44,6 +44,24 @@ public class UserBuildList extends AppCompatActivity {
         homeButton = (Button) findViewById(R.id.homeButton);
         createBuild = (Button) findViewById(R.id.createBuildButton);
 
+        homeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(UserBuildList.this, UserProfileActivity.class);
+                startActivity(i);
+                UserBuildList.this.finish();
+            }
+        });
+
+        createBuild.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(UserBuildList.this, SearchActivity.class);
+                startActivity(i);
+                UserBuildList.this.finish();
+            }
+        });
+
         final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, mBuildList);
         mListView.setAdapter(arrayAdapter);
 

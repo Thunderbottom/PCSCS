@@ -47,6 +47,7 @@ public class LoginActivity extends AppCompatActivity {
 
     // Firebase
     private FirebaseAuth mFirebaseAuth;
+    DatabaseReference mDatabase;
 
     private ProgressDialog progress;
 
@@ -57,7 +58,6 @@ public class LoginActivity extends AppCompatActivity {
 
         // Initialize Firebase
         mFirebaseAuth = FirebaseAuth.getInstance();
-        final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
 
         // Check if network is available
         if(!isNetworkAvailable()) {
@@ -120,15 +120,19 @@ public class LoginActivity extends AppCompatActivity {
                     } else {
                         getUN = getUN.toLowerCase().trim();
                         progress = new ProgressDialog(v.getContext());
-                        progress.setCancelable(true);
+                        progress.setCancelable(false);
                         progress.setMessage("Logging in");
                         progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
                         progress.show();
+
+                        mDatabase = FirebaseDatabase.getInstance().getReference();
                         mDatabase.child("users").child(getUN).child("email")
-                                .addListenerForSingleValueEvent(new ValueEventListener() {
+                                .addValueEventListener(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(DataSnapshot dataSnapshot) {
-                                        if(dataSnapshot.getValue().equals("null")){
+
+                                        Toast.makeText(LoginActivity.this, dataSnapshot.toString(), Toast.LENGTH_SHORT).show();
+                                        if(dataSnapshot.getValue() == null){
                                             progress.dismiss();
                                             Toast.makeText(LoginActivity.this, "The username does not exist", Toast.LENGTH_SHORT).show();
                                             clearFields();

@@ -38,6 +38,7 @@ public class SearchActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
+        setTitle("Create a Build");
 
         databaseReference = FirebaseDatabase.getInstance()
                 .getReference()
